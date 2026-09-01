@@ -1,0 +1,32 @@
+# Benchmark results (generated)
+results/latest/*.json
+
+# Model files (too large for repo)
+*.gguf
+*.gguf.part
+
+# Temporary files
+*.tmp
+*.log
+*.pid
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Environment
+.env
+.env.local
