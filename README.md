@@ -1,8 +1,18 @@
-# Intel Arc LLM Benchmark Suite
+<p align="center">
+  <img src="assets/banner.svg" alt="intel-arc-llm-benchmarks — real measured LLM inference on Intel Arc">
+</p>
 
-**Production-validated LLM inference benchmarks for Intel Arc GPUs (Battlemage B60).**
+<p align="center">
+  <strong>Production-validated LLM inference benchmarks for Intel Arc GPUs (Battlemage B60).</strong><br>
+  Real measured throughput (tok/s), proven quantization recipes, and MoE-vs-dense data — not synthetic marketing numbers.
+</p>
 
-Real measured throughput (tok/s), proven quantization recipes, and MoE-vs-dense data from a card running local LLM inference 24/7 — not synthetic marketing numbers.
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-22D3EE?style=flat-square&labelColor=0A0A0F" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/GPU-Intel%20Arc%20B60-22D3EE?style=flat-square&labelColor=0A0A0F" alt="Intel Arc B60">
+  <img src="https://img.shields.io/badge/backend-llama.cpp%20Vulkan-22D3EE?style=flat-square&labelColor=0A0A0F" alt="llama.cpp Vulkan">
+  <img src="https://img.shields.io/badge/workload-24%2F7%20production-8B5CF6?style=flat-square&labelColor=0A0A0F" alt="24/7 production">
+</p>
 
 > 🔧 **Want to run these models yourself?** The companion repo **[intel-arc-llm-stack](https://github.com/dirtysouthalpha/intel-arc-llm-stack)** is the full one-command server (IPEX-LLM SYCL + Vulkan llama.cpp + model hot-swap + OpenAI-compatible gateway) these benchmarks are measured on.
 
