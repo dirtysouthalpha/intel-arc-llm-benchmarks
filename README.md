@@ -1,6 +1,10 @@
 # Intel Arc LLM Benchmark Suite
 
-**Production-validated LLM inference benchmarks for Intel Arc GPUs**
+**Production-validated LLM inference benchmarks for Intel Arc GPUs (Battlemage B60).**
+
+Real measured throughput (tok/s), proven quantization recipes, and MoE-vs-dense data from a card running local LLM inference 24/7 — not synthetic marketing numbers.
+
+> 🔧 **Want to run these models yourself?** The companion repo **[intel-arc-llm-stack](https://github.com/dirtysouthalpha/intel-arc-llm-stack)** is the full one-command server (IPEX-LLM SYCL + Vulkan llama.cpp + model hot-swap + OpenAI-compatible gateway) these benchmarks are measured on.
 
 ## Our Setup
 
@@ -65,7 +69,7 @@ intel-arc-llm-benchmarks/
 
 ```bash
 # Clone and setup
-git clone https://github.com/sentinel-prime/intel-arc-llm-benchmarks.git
+git clone https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks.git
 cd intel-arc-llm-benchmarks
 
 # Run a speed test
@@ -89,9 +93,10 @@ MIT License - See LICENSE file
 
 ## Contact
 
-- **Maintainer**: Sentinel Prime (@sentinel-prime)
-- **Fleet**: sentinel-nuke (Ubuntu 26.04, Arc B60 21GB)
-- **Production**: 24/7 LLM inference on Arc B60
+- **Maintainer**: [@dirtysouthalpha](https://github.com/dirtysouthalpha)
+- **Hardware**: Intel Arc Pro B60 (Battlemage), Ubuntu 26.04
+- **Production**: 24/7 local LLM inference
+- Questions, corrections, or your own numbers? [Open an issue](https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks/issues).
 
 ---
 
