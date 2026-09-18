@@ -136,8 +136,11 @@ No tiers, no paywalled features, no "pro" build.
 
 - 🚀 [intel-arc-llm-stack](https://github.com/dirtysouthalpha/intel-arc-llm-stack) — run any LLM locally on Intel Arc
 - 🎛️ [muse-maestro](https://github.com/dirtysouthalpha/muse-maestro) — guardrails, memory & cost telemetry for Meta Muse Code
-- 🤖 [sentinel-cli](https://github.com/dirtysouthalpha/sentinel-cli) — multi-provider AI coding agent with smart model routing
-- 🛠️ [msptier3toolkit](https://github.com/dirtysouthalpha/msptier3toolkit) — battle-tested MSP PowerShell
+- 🤖 [sentinel-code](https://github.com/dirtysouthalpha/sentinel-code) — multi-provider AI coding agent with smart model routing
+- 🛠️ [msp-tier3-toolkit](https://github.com/dirtysouthalpha/msp-tier3-toolkit) — battle-tested MSP PowerShell
 - 👤 [@dirtysouthalpha](https://github.com/dirtysouthalpha) — the full fleet
 
 ⭐ If this saved you time, star it and follow for more.
+
+---
+<p align="center"><sub><b>Dirty South Alpha™</b> · © 2026 · <a href="https://dirtysouthalpha.com">dirtysouthalpha.com</a> · self-hosted AI · security-first</sub></p>
