@@ -20,9 +20,18 @@ WARMUP_RUNS=1
 MEASURE_RUNS=3
 RESULTS_DIR="results/latest"
 
+usage() {
+    echo "Usage: $0 --model <path-to-gguf> --quant <quant_name> [--port 8083] [--host 127.0.0.1]"
+    echo "          [--prompt <text>] [--warmup N] [--runs N]"
+}
+
 # Parse args
 while [[ $# -gt 0 ]]; do
     case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
         --model)
             MODEL_PATH="$2"
             shift 2
@@ -53,6 +62,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             echo "Unknown option: $1"
+            usage
             exit 1
             ;;
     esac
@@ -61,7 +71,7 @@ done
 # Validate inputs
 if [[ -z "$MODEL_PATH" ]]; then
     echo -e "${RED}Error: --model is required${NC}"
-    echo "Usage: $0 --model <path-to-gguf> --quant <quant_name> [--port 8083] [--host 127.0.0.1]"
+    usage
     exit 1
 fi
 
@@ -89,10 +99,12 @@ echo ""
 # Function to run single inference and measure speed
 run_inference() {
     local prompt="$1"
+    # shellcheck disable=SC2034  # run label, kept for callers/logging
     local run_num="$2"
+    local start_time output end_time duration tokens tok_per_sec
 
-    local start_time=$(date +%s.%N)
-    local output=$(curl -s -X POST "http://$HOST:$PORT/v1/chat/completions" \
+    start_time=$(date +%s.%N)
+    output=$(curl -s -X POST "http://$HOST:$PORT/v1/chat/completions" \
         -H "Content-Type: application/json" \
         -d "{
             \"model\": \"$MODEL_NAME\",
@@ -100,19 +112,19 @@ run_inference() {
             \"max_tokens\": 150,
             \"temperature\": 0.7
         }")
-    local end_time=$(date +%s.%N)
-    local duration=$(echo "$end_time - $start_time" | bc)
+    end_time=$(date +%s.%N)
+    duration=$(echo "$end_time - $start_time" | bc)
 
     # Count tokens in response
-    local tokens=$(echo "$output" | jq -r '.choices[0].message.content' | wc -w)
-    local tok_per_sec=$(echo "scale=2; $tokens / $duration" | bc)
+    tokens=$(echo "$output" | jq -r '.choices[0].message.content' | wc -w)
+    tok_per_sec=$(echo "scale=2; $tokens / $duration" | bc)
 
     echo "$tokens|$duration|$tok_per_sec|$output"
 }
 
 # Warmup runs (not measured)
 echo -e "${YELLOW}Warming up...${NC}"
-for i in $(seq 1 $WARMUP_RUNS); do
+for i in $(seq 1 "$WARMUP_RUNS"); do
     echo -n "  Warmup $i/$WARMUP_RUNS... "
     run_inference "$TEST_PROMPT" "warmup-$i" > /dev/null
     echo "done"
@@ -125,13 +137,13 @@ declare -a tok_per_sec_array
 declare -a token_counts
 declare -a durations
 
-for i in $(seq 1 $MEASURE_RUNS); do
+for i in $(seq 1 "$MEASURE_RUNS"); do
     echo -n "  Run $i/$MEASURE_RUNS... "
 
-    local result=$(run_inference "$TEST_PROMPT" "measure-$i")
-    local tokens=$(echo "$result" | cut -d'|' -f1)
-    local duration=$(echo "$result" | cut -d'|' -f2)
-    local tps=$(echo "$result" | cut -d'|' -f3)
+    result=$(run_inference "$TEST_PROMPT" "measure-$i")
+    tokens=$(echo "$result" | cut -d'|' -f1)
+    duration=$(echo "$result" | cut -d'|' -f2)
+    tps=$(echo "$result" | cut -d'|' -f3)
 
     tok_per_sec_array+=("$tps")
     token_counts+=("$tokens")
@@ -182,7 +194,7 @@ EOF
 
 # Add individual runs
 first=true
-for i in $(seq 0 $(($MEASURE_RUNS - 1))); do
+for i in $(seq 0 $((MEASURE_RUNS - 1))); do
     if [ "$first" = true ]; then
         first=false
     else
