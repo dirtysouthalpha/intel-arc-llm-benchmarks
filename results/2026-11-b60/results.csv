@@ -1,0 +1,13 @@
+ts,host,gpu,port,alias,model,kind,slot_n_ctx,slots,ctx_fill,prompt_tokens,gen_tokens,ttft_ms,prefill_tok_s,decode_tok_s,wall_s,vram_mib_baseline,vram_mib_peak,note
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8083,internvl3-8b,InternVL3-8B-Instruct-Q4_K_M,generate,32768,1,1024,1026,42,724.1,1422.5,26.69,2.26,6707.9,6707.9,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8083,internvl3-8b,InternVL3-8B-Instruct-Q4_K_M,generate,32768,1,4096,4098,42,7403.6,942.0,25.84,8.99,6707.9,6707.9,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8083,internvl3-8b,InternVL3-8B-Instruct-Q4_K_M,generate,32768,1,7680,7682,41,14203.3,660.9,24.8,15.82,6707.9,6708.3,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8086,decider-4b,decider-4b-v2.1-Q4_K_M,generate,8192,1,1024,1026,37,1888.0,569.9,9.11,5.83,3346.4,3346.4,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8086,decider-4b,decider-4b-v2.1-Q4_K_M,generate,8192,1,4096,4098,37,7661.7,535.2,9.66,11.51,3346.4,3346.7,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8086,decider-4b,decider-4b-v2.1-Q4_K_M,generate,8192,1,7680,7682,38,16529.1,465.3,9.38,20.47,3346.7,3347.2,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8087,qwen3-8b-fast,Qwen3-8B-finetune-Q5_K_M,generate,8192,2,1024,1026,128,1992.0,527.1,14.72,9.73,8036.7,8036.7,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8087,qwen3-8b-fast,Qwen3-8B-finetune-Q5_K_M,generate,8192,2,4096,4098,128,13695.8,304.3,8.95,27.66,8036.7,8036.8,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8087,qwen3-8b-fast,Qwen3-8B-finetune-Q5_K_M,generate,8192,2,7680,7682,128,37476.3,209.4,7.99,52.76,8036.8,8037.2,
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8088,qwen3-reranker,qwen3-reranker-0.6b-q8_0,rerank,8192,4,1744,1744,0,536.0,3254.3,,0.536,1644.7,1693.7,rerank 8 docs; ttft_ms = full rerank latency
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8088,qwen3-reranker,qwen3-reranker-0.6b-q8_0,rerank,8192,4,6998,6998,0,2194.0,3188.9,,2.194,1693.7,1693.7,rerank 32 docs; ttft_ms = full rerank latency
+2026-11-01T13:55:47+00:00,arc-b60-host,Intel(R) Arc(tm) Pro B60 Graphics (BMG G21),8088,qwen3-reranker,qwen3-reranker-0.6b-q8_0,rerank,8192,4,14006,14006,0,7034.0,1991.3,,7.034,1693.7,1693.7,rerank 64 docs; ttft_ms = full rerank latency
