@@ -1,20 +1,53 @@
-<p align="center">
-  <img src="assets/banner.svg" alt="intel-arc-llm-benchmarks — real measured LLM inference on Intel Arc">
-</p>
+# intel-arc-llm-benchmarks
 
-<p align="center">
-  <strong>Production-validated LLM inference benchmarks for Intel Arc GPUs (Battlemage B60).</strong><br>
-  Real measured throughput (tok/s), proven quantization recipes, and MoE-vs-dense data — not synthetic marketing numbers.
-</p>
+**Production-validated LLM inference benchmarks for Intel Arc GPUs (Battlemage B60) — real measured tok/s, proven quantization recipes, and MoE-vs-dense data, not synthetic marketing numbers.**
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-22D3EE?style=flat-square&labelColor=0A0A0F" alt="MIT license"></a>
+  <a href="https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks/actions/workflows/ci.yml"><img src="https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/GPU-Intel%20Arc%20B60-22D3EE?style=flat-square&labelColor=0A0A0F" alt="Intel Arc B60">
   <img src="https://img.shields.io/badge/backend-llama.cpp%20Vulkan-22D3EE?style=flat-square&labelColor=0A0A0F" alt="llama.cpp Vulkan">
   <img src="https://img.shields.io/badge/workload-24%2F7%20production-8B5CF6?style=flat-square&labelColor=0A0A0F" alt="24/7 production">
 </p>
 
+<p align="center">
+  <img src="assets/banner.svg" alt="intel-arc-llm-benchmarks — real measured LLM inference on Intel Arc">
+</p>
+
 > 🔧 **Want to run these models yourself?** The companion repo **[intel-arc-llm-stack](https://github.com/dirtysouthalpha/intel-arc-llm-stack)** is the full one-command server (IPEX-LLM SYCL + Vulkan llama.cpp + model hot-swap + OpenAI-compatible gateway) these benchmarks are measured on.
+
+## Quickstart
+
+Requirements: `bash`, `curl`, `jq`, `bc`, and a running `llama-server` (llama.cpp, Vulkan backend) serving the model you want to measure. The launch flags we use are in [docs/methodology.md](docs/methodology.md#test-procedure).
+
+```bash
+# Clone
+git clone https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks.git
+cd intel-arc-llm-benchmarks
+
+# Start llama-server on 127.0.0.1:8083 (see docs/methodology.md), then run a speed test:
+./scripts/speed-test.sh --model /path/to/model.gguf --quant IQ4_XS
+#   options: --port 8083 --host 127.0.0.1 --prompt "<text>" --warmup 1 --runs 3   (-h for usage)
+
+# View results (1 warmup + 3 measured runs, averaged)
+jq '.results.avg_tok_per_sec' results/latest/speed-test.json
+
+# Run the repo's own test suite (needs shellcheck + bats)
+make test
+```
+
+The script exits `0` when the average is above the 20 tok/s production threshold and `1` otherwise, so it drops straight into CI or a cron job.
+
+## Hardware tested
+
+All numbers in this repo come from one machine, measured under the [documented methodology](docs/methodology.md) (1 warmup + 3 measured runs, word count as token proxy).
+
+| GPU | VRAM | Driver / Backend | Host OS | Model | Quant | Speed (warm) | Status |
+|-----|------|------------------|---------|-------|-------|--------------|--------|
+| Intel Arc Pro B60 (Battlemage) | 21 GB | xe (Mesa 3D) / llama.cpp Vulkan | Ubuntu 26.04 LTS, kernel 7.0.0-30-generic | Huihui-Qwen3-Coder-30B-A3B-Instruct-abliterated (MoE) | IQ4_XS | ~40 tok/s | ✅ PRODUCTION |
+| Intel Arc Pro B60 (Battlemage) | 21 GB | xe (Mesa 3D) / llama.cpp Vulkan | Ubuntu 26.04 LTS, kernel 7.0.0-30-generic | Huihui-Qwen3.8-27B-abliterated (dense) | IQ4_XS | 4.4 tok/s | ❌ REJECTED |
+
+Full write-up: [docs/findings/dense-vs-moe-2026-09-01.md](docs/findings/dense-vs-moe-2026-09-01.md). Got a different Intel Arc card? Add a row via PR following the methodology.
 
 ## Our Setup
 
@@ -60,46 +93,43 @@ We run **production LLM workloads** on an Arc B60 24/7. We have:
 
 ```
 intel-arc-llm-benchmarks/
-├── README.md           # This file
+├── README.md                 # This file
+├── CONTRIBUTING.md           # How to submit benchmarks and patches
 ├── docs/
-│   ├── setup.md        # How to set up benchmark environment
-│   ├── methodology.md  # Testing methodology and metrics
-│   └── findings/       # Detailed benchmark results by model
+│   ├── methodology.md        # Testing methodology and metrics
+│   └── findings/             # Detailed benchmark results by model
 ├── scripts/
-│   ├── benchmark.sh    # Main benchmark runner
-│   ├── speed-test.sh   # Speed test script
-│   └── cleanup.sh      # Post-test cleanup
-├── configs/
-│   └── launch-templates/  # Proven llama-server launch configs
-└── results/
-    └── latest/         # Most recent benchmark results
+│   ├── speed-test.sh         # Speed test script (tok/s via llama-server API)
+│   └── test.sh               # Repo test entrypoint (shellcheck + bats + link check)
+├── tests/                    # bats tests + markdown link checker
+├── Makefile                  # make test / lint / links
+└── results/latest/           # Generated by speed-test.sh (git-ignored)
 ```
 
-## Quick Start
+Planned, not yet in the tree: `docs/setup.md`, `scripts/benchmark.sh`, `scripts/cleanup.sh`, `configs/launch-templates/`.
+
+## Testing
 
 ```bash
-# Clone and setup
-git clone https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks.git
-cd intel-arc-llm-benchmarks
-
-# Run a speed test
-./scripts/speed-test.sh --model <path-to-gguf> --quant IQ4_XS
-
-# View results
-cat results/latest/speed-test.json
+make test        # shellcheck + bats + markdown link check (what CI runs)
+make lint        # shellcheck only
+make links       # relative-link check only
+BATS=/path/to/bats make test   # use a bats binary that is not on PATH
 ```
 
 ## Contributing
 
 We welcome contributions, especially:
-- Model benchmarks (please follow our methodology)
+- Model benchmarks (please follow our [methodology](docs/methodology.md))
 - Driver optimization patches
 - Quantization experiments
 - Production deployment guides
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
+
 ## License
 
-MIT License - See LICENSE file
+MIT License - See [LICENSE](LICENSE) file. Trademark terms: [TRADEMARK.md](TRADEMARK.md).
 
 ## Contact
 
