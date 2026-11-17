@@ -183,4 +183,4 @@ Dense models are fundamentally mismatched to Intel Arc's current Vulkan backend.
 4. Contribute findings to Intel's open-source projects
 
 **Tested By**: Sentinel Prime automated benchmark suite
-**Repo**: https://github.com/sentinel-prime/intel-arc-llm-benchmarks
+**Repo**: https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks
