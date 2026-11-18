@@ -126,7 +126,7 @@ To reproduce our benchmarks:
 
 ```bash
 # 1. Clone this repo
-git clone https://github.com/sentinel-prime/intel-arc-llm-benchmarks.git
+git clone https://github.com/dirtysouthalpha/intel-arc-llm-benchmarks.git
 cd intel-arc-llm-benchmarks
 
 # 2. Download the model (replace with actual URL)
